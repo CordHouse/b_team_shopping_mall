@@ -1,0 +1,50 @@
+<!--Header-->
+# 1. Project
+- Project name : **Shopping site Team Project**
+- Develop Period : *2022/08/01 ~ 2022/08/22*
+- Project Size : **Small**
+---
+# 2. Project Info
+- Sing Up & Login | ( 회원가입 & 로그인 )
+- Wish List | ( 찜 목록 )
+- Shopping Basket | ( 장바구니 )
+- Item Lookup & Edit Personal Information | ( 품목 조회 & 회원정보 수정 )
+- Review | ( 리뷰 )
+- Service Center | ( 고객 센터 )
+---
+# 3. Team Member
+Mentor : [이재윤](https://github.com/sosow0212)
+
+**team member in charge** | **Role**
+
+- [이지우](https://github.com/CordHouse) | Sing Up & Login
+- [이준]() | Wish List
+- [김수인](https://github.com/lsuinl) | Shopping Basket
+- [안지유](https://github.com/zzzzzuuuuu) | Item Lookup & Edit Personal Information
+- [김효선](https://github.com/hy5sun) | Review
+- [이민섭](https://github.com/chrkb1569) | Service Center
+---
+# 4. Skill
+- JWT + Security (Json Web Token)
+- CRUD (Create, Read, Update, Delete)
+- TCP (Transmission Control Protocol) + CIA (Confidentiality, Integrity, Availability) + RSA + RFC
+- yml
+- JWT Filter
+---
+# 5. Progress
+| **Completed** |
+```text
+< Setup >
+1. Project Init | 프로젝트 초기화
+2. Project Preferences | 프로젝트 환경설정
+```
+| **Incomplete** |
+```text
+< Implement >
+1. Sign Up & Login | 회원가입 & 로그인
+2. Wish List | 찜 목록
+3. Shopping Basket | 장바구니
+4. Item Lookup & Edit Personal Information | 품목 조회 & 회원정보 수정
+5. Review | 리뷰
+6. Service Center | 고객 센터
+```
