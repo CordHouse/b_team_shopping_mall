@@ -19,20 +19,20 @@ public class CartController {
 
     //장바구니 물품들 모두 구매.
     @PostMapping("/api/carts")
-    public ResponseEntity<?> writeBoard(@RequestBody Cart cart  ){
+    public ResponseEntity<?> writeBoard(@RequestBody Cart cart){
         return new ResponseEntity<>(cartService.BuyObj(cart), HttpStatus.OK);
     }
 
     //장바구니 물품 삭제
-    @DeleteMapping("/api/carts/{subject}")
+    @DeleteMapping("/api/carts/{id}")
     public ResponseEntity<?> deleteBoard(@PathVariable Long id){
         cartService.DeleteCartObj(id);
         return new ResponseEntity<>("게시글 삭제 완료", HttpStatus.OK);
     }
 
     //장바구니 물품 전체 삭제
-    @DeleteMapping("/api/carts/{subject}")
-    public ResponseEntity<?> deleteAllBoard(@PathVariable Long id){
+    @DeleteMapping("/api/carts")
+    public ResponseEntity<?> deleteAllBoard(){
         cartService.DeleteAllCartObj();
         return new ResponseEntity<>("모든 물품이 장바구니에서 삭제되었습니다.", HttpStatus.OK);
     }
