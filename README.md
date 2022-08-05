@@ -18,7 +18,7 @@ Mentor : [이재윤](https://github.com/sosow0212)
 **team member in charge** | **Role**
 
 - [이지우](https://github.com/CordHouse) | Sing Up & Login
-- [이준]() | Wish List
+- [이준](https://github.com/JuneBori) | Wish List
 - [김수인](https://github.com/lsuinl) | Shopping Basket
 - [안지유](https://github.com/zzzzzuuuuu) | Item Lookup & Edit Personal Information
 - [김효선](https://github.com/hy5sun) | Review
