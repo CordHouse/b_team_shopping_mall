@@ -51,7 +51,7 @@ Mentor : [이재윤](https://github.com/sosow0212)
 ---
 # 6. Convention
 | **Git Convention** |
-```aidl
+```text
 Git Convention
 feat : 기능추가
 fix : 버그 수정
