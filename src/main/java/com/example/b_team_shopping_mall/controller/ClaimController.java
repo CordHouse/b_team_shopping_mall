@@ -4,7 +4,6 @@ package com.example.b_team_shopping_mall.controller;
 import com.example.b_team_shopping_mall.dto.ClaimCreateRequestDto;
 import com.example.b_team_shopping_mall.dto.ClaimEditRequestDto;
 import com.example.b_team_shopping_mall.response.Response;
-import com.example.b_team_shopping_mall.response.Result;
 import com.example.b_team_shopping_mall.service.ClaimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,35 +26,35 @@ public class ClaimController {
     private final ClaimService claimService;
 
     // 문의글 전체 조회
-    @GetMapping("/api/service/boards")
+    @GetMapping("/api/claims")
     @ResponseStatus(HttpStatus.OK)
     public Response getBoards() {
         return Response.success(claimService.findAll());
     }
 
     // 문의글 단일 조회
-    @GetMapping("/api/service/boards/{id}")
+    @GetMapping("/api/claims/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Response getBoard(@PathVariable Long id) {
         return Response.success(claimService.findBoard(id));
     }
 
     // 문의글 생성
-    @PostMapping("/api/service/boards")
+    @PostMapping("/api/claims")
     @ResponseStatus(HttpStatus.CREATED)
     public Response saveBoard(@RequestBody @Valid ClaimCreateRequestDto requestDto) {
         return Response.success(claimService.save(requestDto));
     }
 
     // 문의글 수정
-    @PutMapping("/api/service/boards/{id}")
+    @PutMapping("/api/claims/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Response editBoard(@RequestBody @Valid ClaimEditRequestDto requestDto, @PathVariable Long id) {
         return Response.success(claimService.edit(requestDto, id));
     }
 
     // 문의글 삭제
-    @DeleteMapping("/api/service/boards/{id}")
+    @DeleteMapping("/api/claims/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteBoard(@PathVariable Long id) {
         claimService.delete(id);
