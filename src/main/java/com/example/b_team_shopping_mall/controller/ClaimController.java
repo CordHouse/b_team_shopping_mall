@@ -1,8 +1,8 @@
 package com.example.b_team_shopping_mall.controller;
 
 
-import com.example.b_team_shopping_mall.dto.ClaimCreateRequestDto;
-import com.example.b_team_shopping_mall.dto.ClaimEditRequestDto;
+import com.example.b_team_shopping_mall.dto.Claim.ClaimCreateRequestDto;
+import com.example.b_team_shopping_mall.dto.Claim.ClaimEditRequestDto;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.ClaimService;
 import lombok.RequiredArgsConstructor;

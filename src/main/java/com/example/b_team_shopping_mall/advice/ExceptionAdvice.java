@@ -19,7 +19,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(ClaimNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Response boardNotFoundException() {
+    public Response claimNotFoundException() {
         return Response.failure(404, "해당 id를 가진 문의글을 찾지 못하였습니다. 다시 한번 확인해주세요");
     }
 
