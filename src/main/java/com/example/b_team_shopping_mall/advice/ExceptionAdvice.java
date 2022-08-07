@@ -1,6 +1,7 @@
 package com.example.b_team_shopping_mall.advice;
 
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
+import com.example.b_team_shopping_mall.exception.RegisterNotFoundIdException;
 import com.example.b_team_shopping_mall.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,5 +21,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response claimNotFoundException() {
         return Response.failure(404, "해당 id를 가진 문의글을 찾지 못하였습니다. 다시 한번 확인해주세요");
+    }
+
+    @ExceptionHandler(RegisterNotFoundIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerNotFoundIdException(){
+        return Response.failure(404, "아이디와 비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
     }
 }

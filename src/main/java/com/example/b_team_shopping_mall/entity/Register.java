@@ -25,17 +25,18 @@ public class Register {
 
     // 유저 패스워드
     @Column(nullable = false)
-    private String memberpw;
+    private String memberpassword;
 
     // 유저 이메일 ( Not Null, 중복 x )
     @Column(nullable = false, unique = true)
     private String memberemail;
 
     // 회원가입 생성자 -> id 없이
-    public Register(String membername, String memberid, String memberpw, String memberemail){
+
+    public Register(String membername, String memberid, String memberpassword, String memberemail){
         this.membername = membername;
         this.memberid = memberid;
-        this.memberpw = memberpw;
+        this.memberpassword = memberpassword;
         this.memberemail = memberemail;
     }
 
