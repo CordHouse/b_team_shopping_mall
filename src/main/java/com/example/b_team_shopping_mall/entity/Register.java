@@ -32,6 +32,7 @@ public class Register {
     private String memberemail;
 
     // 회원가입 생성자 -> id 없이
+
     public Register(String membername, String memberid, String memberpassword, String memberemail){
         this.membername = membername;
         this.memberid = memberid;
