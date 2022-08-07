@@ -1,4 +1,4 @@
-package com.example.b_team_shopping_mall.dto;
+package com.example.b_team_shopping_mall.dto.Claim;
 
 import lombok.Data;
 

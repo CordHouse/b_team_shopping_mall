@@ -1,4 +1,4 @@
-package com.example.b_team_shopping_mall.dto;
+package com.example.b_team_shopping_mall.dto.Claim;
 
 import com.example.b_team_shopping_mall.entity.Claim;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClaimEditResponseDto {
+public class ClaimCreateResponseDto {
     private String title;
     private String content;
     private String writer;
 
-    public ClaimEditResponseDto toDto(Claim claim) {
-        return new ClaimEditResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getMembername());
+    public ClaimCreateResponseDto toDto(Claim claim) {
+        return new ClaimCreateResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getMembername());
     }
 }

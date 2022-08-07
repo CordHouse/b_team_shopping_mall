@@ -1,4 +1,4 @@
-package com.example.b_team_shopping_mall.dto;
+package com.example.b_team_shopping_mall.dto.Claim;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ClaimCreateRequestDto {
 
-    private String writer;
+    private String memberid;
 
     @NotBlank(message = "문의하실 사항의 제목을 입력해주세요")
     private String title;

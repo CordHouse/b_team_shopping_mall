@@ -1,6 +1,6 @@
 package com.example.b_team_shopping_mall.service;
 
-import com.example.b_team_shopping_mall.dto.*;
+import com.example.b_team_shopping_mall.dto.Claim.*;
 import com.example.b_team_shopping_mall.entity.Claim;
 import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
@@ -32,7 +32,7 @@ public class ClaimService {
     }
     @Transactional
     public ClaimCreateResponseDto save(ClaimCreateRequestDto requestDto) {
-        Register register = registerRepository.findRegisterByUsername(requestDto.getWriter());
+        Register register = registerRepository.findBymemberid(requestDto.getMemberid());
         Claim claim = Claim.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
