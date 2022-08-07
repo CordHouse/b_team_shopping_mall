@@ -29,7 +29,7 @@ Mentor : [이재윤](https://github.com/sosow0212)
 - CRUD (Create, Read, Update, Delete)
 - TCP (Transmission Control Protocol) + CIA (Confidentiality, Integrity, Availability) + RSA + RFC
 - yml
-- JWT Filter
+- JWT Filter 
 ---
 # 5. Progress
 | **Completed** |
