@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ClaimCreateRequestDto {
 
-    private String memberid;
+    private String userid;
 
     @NotBlank(message = "문의하실 사항의 제목을 입력해주세요")
     private String title;

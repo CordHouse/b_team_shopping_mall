@@ -11,14 +11,14 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class RegisterSignUpRquestDto {
     @NotBlank(message = "아이디를 입력해주세요.")
-    private String memberid;
+    private String userid;
 
     @NotBlank(message = "성함을 입력해주세요.")
-    private String membername;
+    private String username;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
-    private String memberpassword;
+    private String password;
 
     @NotBlank(message = "이메일을 입력해주세요.")
-    private String memberemail;
+    private String email;
 }

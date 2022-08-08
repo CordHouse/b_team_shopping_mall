@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 // 회원가입 JPA -> Register/ Long
 public interface RegisterRepository extends JpaRepository<Register, Long> {
-    Register findBymemberid(String memberid);
+    Register findByuserid(String userid);
 }
