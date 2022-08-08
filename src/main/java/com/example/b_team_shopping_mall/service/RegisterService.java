@@ -28,7 +28,7 @@ public class RegisterService {
     // 회원가입 함수
     @Transactional
     public RegisterSignUpResponseDto signUp(RegisterSignUpRquestDto registerSignUpRquestDto){
-        Register register = new Register(registerSignUpRquestDto.getMembername(), registerSignUpRquestDto.getMemberid(), registerSignUpRquestDto.getMemberpassword(), registerSignUpRquestDto.getMemberemail());
+        Register register = new Register(registerSignUpRquestDto.getUsername(), registerSignUpRquestDto.getUserid(), registerSignUpRquestDto.getPassword(), registerSignUpRquestDto.getEmail());
         registerRepository.save(register);
         return new RegisterSignUpResponseDto().toDto(register);
     }
@@ -36,8 +36,8 @@ public class RegisterService {
     // 로그인 함수
     @Transactional
     public RegisterLoginResponseDto login(RegisterLoginRequestDto registerLoginRequestDto){
-        Register register = registerRepository.findBymemberid(registerLoginRequestDto.getMemberid());
-        if(register.getMemberpassword().equals(registerLoginRequestDto.getMemberpassword()))
+        Register register = registerRepository.findByuserid(registerLoginRequestDto.getUserid());
+        if(register.getPassword().equals(registerLoginRequestDto.getPassword()))
             return new RegisterLoginResponseDto().toDto(registerLoginRequestDto);
 
         throw new RegisterNotFoundIdException();

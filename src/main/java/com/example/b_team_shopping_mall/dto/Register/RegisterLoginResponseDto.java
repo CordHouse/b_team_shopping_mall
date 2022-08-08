@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterLoginResponseDto {
-    private String memberid;
+    private String userid;
 
     public RegisterLoginResponseDto toDto(RegisterLoginRequestDto registerLoginRequestDto){
-        return new RegisterLoginResponseDto(registerLoginRequestDto.getMemberid());
+        return new RegisterLoginResponseDto(registerLoginRequestDto.getUserid());
     }
 }
