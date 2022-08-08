@@ -5,7 +5,6 @@ import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
