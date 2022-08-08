@@ -11,8 +11,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RegisterLoginRequestDto {
     @NotBlank(message = "아이디를 입력해주세요.")
-    private String memberid;
+    private String userid;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
-    private String memberpassword;
+    private String password;
 }

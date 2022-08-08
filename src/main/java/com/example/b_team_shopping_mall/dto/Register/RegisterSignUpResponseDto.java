@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterSignUpResponseDto {
     private Long id;
-    private String membername;
+    private String username;
 
     public RegisterSignUpResponseDto toDto(Register register){
-        return new RegisterSignUpResponseDto(register.getId(), register.getMembername());
+        return new RegisterSignUpResponseDto(register.getId(), register.getUsername());
     }
 }
