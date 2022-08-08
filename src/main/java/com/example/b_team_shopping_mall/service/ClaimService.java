@@ -1,9 +1,11 @@
 package com.example.b_team_shopping_mall.service;
 
-import com.example.b_team_shopping_mall.dto.*;
+import com.example.b_team_shopping_mall.dto.Claim.*;
 import com.example.b_team_shopping_mall.entity.Claim;
+import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
 import com.example.b_team_shopping_mall.repository.ClaimRepository;
+import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 public class ClaimService {
 
     private final ClaimRepository claimRepository;
+    private final RegisterRepository registerRepository;
 
     @Transactional(readOnly = true)
     public List<ClaimListResponseDto> findAll() {
@@ -29,10 +32,16 @@ public class ClaimService {
     }
     @Transactional
     public ClaimCreateResponseDto save(ClaimCreateRequestDto requestDto) {
-        Claim serviceboards = new Claim(requestDto.getTitle(), requestDto.getContent(), requestDto.getTitle());
-        claimRepository.save(serviceboards);
+        Register register = registerRepository.findBymemberid(requestDto.getMemberid());
+        Claim claim = Claim.builder()
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .register(register)
+                .build();
 
-        return new ClaimCreateResponseDto().toDto(serviceboards);
+        claimRepository.save(claim);
+
+        return new ClaimCreateResponseDto().toDto(claim);
     }
 
     @Transactional
