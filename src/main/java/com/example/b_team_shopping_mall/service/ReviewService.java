@@ -1,12 +1,16 @@
 package com.example.b_team_shopping_mall.service;
 
-import com.example.b_team_shopping_mall.entity.Board;
+import com.example.b_team_shopping_mall.dto.Review.*;
+import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.entity.Review;
+import com.example.b_team_shopping_mall.exception.ReviewNotFoundException;
+import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import com.example.b_team_shopping_mall.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -14,28 +18,45 @@ import java.util.List;
 
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final RegisterRepository registerRepository;
 
     //리뷰 전체 조회
     @Transactional(readOnly = true)
-    public List<Review> findAll() {
+    public List<ReviewListResponseDto> findAll() {
         List<Review> reviews = reviewRepository.findAll();
-        return reviews;
+        List<ReviewListResponseDto> reviewListResponseDtoList = new ArrayList<>();
+        reviews.stream().forEach(i -> reviewListResponseDtoList.add(new ReviewListResponseDto().toDto(i)));
+        return reviewListResponseDtoList;
     }
 
     //리뷰 작성
     @Transactional
-    public Review save(Review review) {
-        return reviewRepository.save(review);
+    public ReviewCreateResponseDto save(ReviewCreateRequestDto requestDto) {
+        Register register = registerRepository.findByuserid(requestDto.getUserid());
+        Review review = Review.builder()
+                .item(requestDto.getItem())
+                .itemcolor(requestDto.getItemcolor())
+                .itemsize(requestDto.getItemsize())
+                .score(requestDto.getScore())
+                .content(requestDto.getContent())
+                .register(register)
+                .build();
+
+
+        reviewRepository.save(review);
+        return new ReviewCreateResponseDto().toDto(review);
     }
 
     //리뷰 수정
     @Transactional(readOnly = true)
-    public Review edit(Long id, Review updateReview) {
-        Review review = reviewRepository.findById(id).get();
+    public ReviewEditResponseDto edit(Long id, ReviewEditRequestDto requestDto) {
+        Review findReview = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
 
-        //상품명과 옵션은 수정 불가능
-        review.setContent(updateReview.getContent());
-        return review;
+        //상품명과 옵션(색상, 사이즈)은 수정 불가능
+        findReview.setScore(requestDto.getScore());
+        findReview.setContent(requestDto.getContent());
+
+        return new ReviewEditResponseDto().toDto(findReview);
     }
 
     //리뷰 삭제
