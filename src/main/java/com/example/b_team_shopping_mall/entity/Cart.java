@@ -20,12 +20,12 @@ public class Cart {
     private Long id; //저장된 상품. 고유 아이디
 
     @Column(nullable = false)
-    private String object; //상품명
+    private String item; //상품명
 
     @Column(nullable = false)
     private  int count; //상품 개수
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private int price; //상품 가격
 
     @ManyToOne(fetch = FetchType.LAZY)

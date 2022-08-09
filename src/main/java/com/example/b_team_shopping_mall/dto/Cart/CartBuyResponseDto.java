@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CartBuyResponseDto {
-    private String Object;
+    private String item;
     private int count;
     private int price;
     private String user;
     public CartBuyResponseDto toDto(Cart cart) {
-        return new CartBuyResponseDto(cart.getObject(), cart.getCount(), cart.getPrice(),cart.getRegister().getMembername());
+        return new CartBuyResponseDto(cart.getItem(), cart.getCount(), cart.getPrice(),cart.getRegister().getUsername());
     }
 }

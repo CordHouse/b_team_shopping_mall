@@ -13,30 +13,30 @@ public class CartController {
     //장바구니 전체 조회
     @GetMapping("/api/carts")
     @ResponseStatus(HttpStatus.OK)
-    public Response findAll(String memberid){
-        return  Response.success(cartService.FindAllCart(memberid));
+    public Response fineallcart(){
+        return  Response.success(cartService.FindAllCart());
     }
-//RequsetBody, PathVariable/??
-    //장바구니 물품들 모두 구매.
+   //RequsetBody, PathVariable/??
+   //장바구니 물품들 모두 구매.
     @PostMapping("/api/carts")
     @ResponseStatus(HttpStatus.OK)
-    public Response writeBoard(String memberid){
-        return Response.success(cartService.BuyObj(memberid));
+    public Response buyitem(){
+        return Response.success(cartService.BuyItem());
     }
 
     //장바구니 물품 삭제
     @DeleteMapping("/api/carts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response deleteBoard(String memberid, String object){
-        cartService.DeleteCartObj(memberid, object);
+    public Response DeleteCartitem(String item){
+        cartService.DeleteCartItem(item);
         return Response.success("물품 삭제 완료");
     }
 
     //장바구니 물품 전체 삭제
     @DeleteMapping("/api/carts")
     @ResponseStatus(HttpStatus.OK)
-    public Response deleteAllBoard(String memberid){
-        cartService.DeleteAllCartObj(memberid);
+    public Response deleteallcartitem(){
+        cartService.DeleteAllCartItem();
         return Response.success("모든 물품이 장바구니에서 삭제되었습니다.");
     }
 }
