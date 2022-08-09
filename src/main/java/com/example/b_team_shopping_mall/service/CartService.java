@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -45,7 +46,8 @@ public class CartService {
 //        cart.forEach(i-> cartBuyResponseDtos.add(new CartBuyResponseDto().toDto(i)));
          return cartBuyResponseDtos;
     }
-    //유저의 물품 중 선택한 물품 삭제
+
+    //유저의 물품 중 선택한 물품 전체삭제
     @Transactional
     public void DeleteCartItem(String item){
         cartRepository.deleteByRegisterAndItem(registerRepository.findByuserid("suin"), item);//유저찾기
@@ -56,5 +58,4 @@ public class CartService {
     public void DeleteAllCartItem(){
         cartRepository.deleteAllByRegister(registerRepository.findByuserid("suin"));//유저찾기
     }
-
 }

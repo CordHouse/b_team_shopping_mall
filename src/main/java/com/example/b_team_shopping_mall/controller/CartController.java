@@ -13,7 +13,7 @@ public class CartController {
     //장바구니 전체 조회
     @GetMapping("/api/carts")
     @ResponseStatus(HttpStatus.OK)
-    public Response fineallcart(){
+    public Response findallcart(){
         return  Response.success(cartService.FindAllCart());
     }
    //RequsetBody, PathVariable/??

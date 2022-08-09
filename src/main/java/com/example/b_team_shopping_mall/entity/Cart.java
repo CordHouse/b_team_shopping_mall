@@ -19,7 +19,7 @@ public class Cart {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id; //저장된 상품. 고유 아이디
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String item; //상품명
 
     @Column(nullable = false)

@@ -12,7 +12,7 @@ public class CartBuyResponseDto {
     private String item;
     private int count;
     private int price;
-    private String user;
+    private String username;
     public CartBuyResponseDto toDto(Cart cart) {
         return new CartBuyResponseDto(cart.getItem(), cart.getCount(), cart.getPrice(),cart.getRegister().getUsername());
     }
