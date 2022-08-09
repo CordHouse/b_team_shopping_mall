@@ -1,5 +1,6 @@
 package com.example.b_team_shopping_mall.advice;
 
+import com.example.b_team_shopping_mall.exception.CartNotFoundItemListException;
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
 import com.example.b_team_shopping_mall.exception.RegisterNotFoundIdException;
 import com.example.b_team_shopping_mall.response.Response;
@@ -27,5 +28,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response registerNotFoundIdException(){
         return Response.failure(404, "아이디와 비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
+    }
+
+    @ExceptionHandler(CartNotFoundItemListException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response CartNotFoundItemListException(){
+        return Response.failure(404, "장바구니 목록을 불러오지 못했습니다.");
     }
 }

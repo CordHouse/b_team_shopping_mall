@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClaimCreateResponseDto {
+
     private String title;
     private String content;
     private String writer;
