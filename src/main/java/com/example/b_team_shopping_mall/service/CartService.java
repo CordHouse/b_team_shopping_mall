@@ -2,7 +2,7 @@ package com.example.b_team_shopping_mall.service;
 
 import com.example.b_team_shopping_mall.dto.Cart.*;
 import com.example.b_team_shopping_mall.entity.Cart;
-import com.example.b_team_shopping_mall.exception.CartNotFoundException;
+import com.example.b_team_shopping_mall.exception.CartNotFoundItemListException;
 import com.example.b_team_shopping_mall.repository.CartRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 
