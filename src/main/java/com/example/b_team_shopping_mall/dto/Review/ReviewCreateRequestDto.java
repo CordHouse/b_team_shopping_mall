@@ -11,7 +11,7 @@ public class ReviewCreateRequestDto {
     private String userid; //사용자 아이디
 
     @NotBlank(message = "구매하신 상품명을 입력해주세요.")
-    private String item;
+    private String title;
 
     @NotBlank(message = "상품의 색상을 입력해주세요.")
     private String itemcolor;

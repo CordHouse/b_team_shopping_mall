@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class ReviewEditResponseDto {
-    private String item;
+    private String title;
     private String itemcolor;
     private String itemsize;
     private Long score;
@@ -18,7 +18,7 @@ public class ReviewEditResponseDto {
     private String writer;
 
     public ReviewEditResponseDto toDto(Review review) {
-        return new ReviewEditResponseDto(review.getItem(), review.getItemcolor(), review.getItemsize(),
+        return new ReviewEditResponseDto(review.getTitle(), review.getItemcolor(), review.getItemsize(),
                 review.getScore(), review.getContent(), review.getRegister().getUsername());
     }
 }

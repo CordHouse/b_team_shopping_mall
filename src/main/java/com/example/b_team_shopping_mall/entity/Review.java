@@ -21,7 +21,7 @@ public class Review {
     private Long id;
 
     @Column(nullable = false)
-    private String item; //구매한 상품명 - 제목
+    private String title; //구매한 상품명 - 제목
 
     @Column (nullable = false)
     private String itemcolor; //상품 색상
@@ -37,8 +37,8 @@ public class Review {
 
 
     //상품명, 색상, 사이즈, 리뷰 내용을 저장
-    public Review(String item, String itemcolor, String itemsize, Long score, String content){
-        this.item = item;
+    public Review(String title, String itemcolor, String itemsize, Long score, String content){
+        this.title = title;
         this.itemcolor = itemcolor;
         this.itemsize = itemsize;
         this.score = score;
