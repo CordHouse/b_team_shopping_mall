@@ -34,7 +34,7 @@ public class ReviewService {
     public ReviewCreateResponseDto save(ReviewCreateRequestDto requestDto) {
         Register register = registerRepository.findByuserid(requestDto.getUserid());
         Review review = Review.builder()
-                .item(requestDto.getItem())
+                .title(requestDto.getTitle())
                 .itemcolor(requestDto.getItemcolor())
                 .itemsize(requestDto.getItemsize())
                 .score(requestDto.getScore())
