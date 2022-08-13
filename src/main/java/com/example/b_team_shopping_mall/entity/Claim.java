@@ -25,8 +25,6 @@ public class Claim {
     @Column(nullable = false)
     private String content;
 
-    private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

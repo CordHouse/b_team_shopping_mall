@@ -3,6 +3,7 @@ package com.example.b_team_shopping_mall.service;
 import com.example.b_team_shopping_mall.dto.Claim.*;
 import com.example.b_team_shopping_mall.entity.Claim;
 import com.example.b_team_shopping_mall.entity.Register;
+import com.example.b_team_shopping_mall.exception.ClaimEmptyException;
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
 import com.example.b_team_shopping_mall.repository.ClaimRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
@@ -24,7 +25,15 @@ public class ClaimService {
 
     @Transactional(readOnly = true)
     public List<ClaimListResponseDto> findAll() {
-        return claimRepository.findAll().stream().map(s -> new ClaimListResponseDto().toDto(s)).collect(Collectors.toList());
+
+        List<ClaimListResponseDto> claims = claimRepository.findAll()
+                .stream().map(s -> new ClaimListResponseDto().toDto(s)).collect(Collectors.toList());
+
+        if(claims.isEmpty()) {
+            throw new ClaimEmptyException();
+        }
+
+        return claims;
     }
 
     @Transactional(readOnly = true)
@@ -60,6 +69,8 @@ public class ClaimService {
     }
     @Transactional
     public void delete(Long id) {
+        Claim claim = claimRepository.findById(id).orElseThrow(ClaimNotFoundException::new);
+
         claimRepository.deleteById(id);
     }
 }
