@@ -32,7 +32,7 @@ public class ReviewService {
     //리뷰 작성
     @Transactional
     public ReviewCreateResponseDto save(ReviewCreateRequestDto requestDto) {
-        Register register = registerRepository.findByuserid(requestDto.getUserid());
+        Register register = registerRepository.findByUserid(requestDto.getUserid());
         Review review = Review.builder()
                 .title(requestDto.getTitle())
                 .itemcolor(requestDto.getItemcolor())
