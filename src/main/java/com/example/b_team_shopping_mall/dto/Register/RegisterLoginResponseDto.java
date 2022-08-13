@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterLoginResponseDto {
-    private String userid;
+    private String token;
 
-    public RegisterLoginResponseDto toDto(RegisterLoginRequestDto registerLoginRequestDto){
-        return new RegisterLoginResponseDto(registerLoginRequestDto.getUserid());
+    public RegisterLoginResponseDto toDto(String token){
+        this.token = token;
+        return new RegisterLoginResponseDto(getToken());
     }
 }

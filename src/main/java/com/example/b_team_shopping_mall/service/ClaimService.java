@@ -32,7 +32,7 @@ public class ClaimService {
     }
     @Transactional
     public ClaimCreateResponseDto save(ClaimCreateRequestDto requestDto) {
-        Register register = registerRepository.findByuserid(requestDto.getUserid());
+        Register register = registerRepository.findByUserid(requestDto.getUserid());
         Claim claim = Claim.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())

@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 public class RegisterSignUpResponseDto {
     private Long id;
     private String username;
+    private String role;
 
     public RegisterSignUpResponseDto toDto(Register register){
-        return new RegisterSignUpResponseDto(register.getId(), register.getUsername());
+        return new RegisterSignUpResponseDto(register.getId(), register.getUsername(), register.getRole());
     }
 }

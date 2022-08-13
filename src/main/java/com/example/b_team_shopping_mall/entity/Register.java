@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,12 +34,23 @@ public class Register {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String role;
+
     // 회원가입 생성자 -> id 없이
-    public Register(String username, String userid, String password, String email){
+    public Register(String username, String userid, String password, String email, String role){
         this.username = username;
         this.userid = userid;
         this.password = password;
         this.email = email;
+        this.role = role;
+    }
+
+    public List<String> getRoleList(){
+        if(this.role.length() > 0){
+            return Arrays.asList(this.role.split(","));
+        }
+        return new ArrayList<>();
     }
 
 }

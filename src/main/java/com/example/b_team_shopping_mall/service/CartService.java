@@ -23,7 +23,7 @@ public class CartService {
     //유저가 가진 품목 전체조회
     @Transactional(readOnly = true)
     public List<CartListResponseDto> FindAllCart(){
-        List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByuserid("suin"));
+        List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByUserid("suin"));
         List<CartListResponseDto> cartListResponseDtos = new LinkedList<>();
         cart.forEach(i -> cartListResponseDtos.add(new CartListResponseDto().toDto(i)));
 
@@ -37,7 +37,7 @@ public class CartService {
     //유저가 담은 품목 전체 구매
     @Transactional
     public List<CartBuyResponseDto> BuyItem(){
-        List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByuserid("suin"));
+        List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByUserid("suin"));
         List<CartBuyResponseDto>  cartBuyResponseDtos= new LinkedList<>();
         cart.forEach(i -> cartBuyResponseDtos.add(new CartBuyResponseDto().toDto(i)));
 //        Register register = registerRepository.findByuserid(memberid);//유저찾기
@@ -50,12 +50,12 @@ public class CartService {
     //유저의 물품 중 선택한 물품 전체삭제
     @Transactional
     public void DeleteCartItem(String item){
-        cartRepository.deleteByRegisterAndItem(registerRepository.findByuserid("suin"), item);//유저찾기
+        cartRepository.deleteByRegisterAndItem(registerRepository.findByUserid("suin"), item);//유저찾기
     }
 
     //전체삭제
     @Transactional
     public void DeleteAllCartItem(){
-        cartRepository.deleteAllByRegister(registerRepository.findByuserid("suin"));//유저찾기
+        cartRepository.deleteAllByRegister(registerRepository.findByUserid("suin"));//유저찾기
     }
 }
