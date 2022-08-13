@@ -22,6 +22,13 @@ public class ExceptionAdvice {
         return Response.failure(404, "해당 id를 가진 문의글을 찾지 못하였습니다. 다시 한번 확인해주세요");
     }
 
+    @ExceptionHandler(ClaimEmptyException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response claimEmptyException() {
+        return Response.failure(404, "해당 사용자가 작성한 문의글이 존재하지 않습니다.");
+    }
+
+
     @ExceptionHandler(RegisterNotFoundIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response registerNotFoundIdException(){
