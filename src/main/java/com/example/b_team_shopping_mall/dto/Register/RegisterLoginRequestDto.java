@@ -12,12 +12,12 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class RegisterLoginRequestDto {
     @NotBlank(message = "아이디를 입력해주세요.")
-    private String userid;
+    private String username;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
-        return new UsernamePasswordAuthenticationToken(userid, password);
+        return new UsernamePasswordAuthenticationToken(username, password);
     }
 }

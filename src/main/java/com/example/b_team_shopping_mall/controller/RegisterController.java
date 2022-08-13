@@ -32,8 +32,7 @@ public class RegisterController {
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public Response signUp(@RequestBody @Valid RegisterSignUpRequestDto registerSignUpRequestDto){
-        registerService.signUp(registerSignUpRequestDto);
-        return Response.success();
+        return Response.success(registerService.signUp(registerSignUpRequestDto));
     }
 
     // 로그인 controller

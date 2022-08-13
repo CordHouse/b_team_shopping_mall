@@ -1,8 +1,6 @@
 package com.example.b_team_shopping_mall.advice;
 
-import com.example.b_team_shopping_mall.exception.CartNotFoundItemListException;
-import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
-import com.example.b_team_shopping_mall.exception.RegisterNotFoundIdException;
+import com.example.b_team_shopping_mall.exception.*;
 import com.example.b_team_shopping_mall.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,12 +25,24 @@ public class ExceptionAdvice {
     @ExceptionHandler(RegisterNotFoundIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Response registerNotFoundIdException(){
-        return Response.failure(404, "아이디와 비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
+        return Response.failure(404, "해당 아이디는 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(RegisterNotFoundPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerNotFoundPasswordException(){
+        return Response.failure(404, "비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
     }
 
     @ExceptionHandler(CartNotFoundItemListException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Response CartNotFoundItemListException(){
-        return Response.failure(404, "장바구니 목록을 불러오지 못했습니다.");
+    public Response cartNotFoundItemListException(){
+        return Response.failure(404, "해당 유저 장바구니는 비어있습니다.");
+    }
+
+    @ExceptionHandler(CartNotFoundItemException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response cartNotFoundItemException(){
+        return Response.failure(404, "삭제할 품목이 없습니다.");
     }
 }
