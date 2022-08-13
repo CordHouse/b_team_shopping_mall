@@ -14,6 +14,6 @@ public class ClaimEditResponseDto {
     private String writer;
 
     public ClaimEditResponseDto toDto(Claim claim) {
-        return new ClaimEditResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getUsername());
+        return new ClaimEditResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getName());
     }
 }

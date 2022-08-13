@@ -11,5 +11,4 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     List<Cart> findAllByRegister(Register register);
     // 유저의 특정물품 삭제
     Cart deleteAllByRegister(Register register);
-    Cart deleteByRegisterAndItem(Register register, String item);
 }

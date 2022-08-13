@@ -20,11 +20,11 @@ public class Register {
 
     // 유저 이름
     @Column(nullable = false)
-    private String username;
+    private String name;
 
     // 유저 아이디 ( Not Null, 중복 x )
     @Column(nullable = false, unique = true)
-    private String userid;
+    private String username;
 
     // 유저 패스워드
     @Column(nullable = false)
@@ -38,9 +38,9 @@ public class Register {
     private Authority authority;
 
     // 회원가입 생성자 -> id 없이
-    public Register(String username, String userid, String password, String email, Authority authority){
+    public Register(String name, String username, String password, String email, Authority authority){
+        this.name = name;
         this.username = username;
-        this.userid = userid;
         this.password = password;
         this.email = email;
         this.authority = authority;

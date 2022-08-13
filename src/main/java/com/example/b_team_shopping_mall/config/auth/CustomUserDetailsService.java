@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
-        return registerRepository.findByUserid(userid)
+        return registerRepository.findByUsername(userid)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException(userid + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
@@ -33,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(register.getAuthority().toString());
 
         return new User(
-                register.getUserid(),
+                register.getUsername(),
                 register.getPassword(),
                 Collections.singleton(grantedAuthority)
         );

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 public class ReviewEditRequestDto {
 
     @NotBlank(message = "평점을 매겨주세요.")
-    private Long score;
+    private String score;
 
     @NotBlank(message = "수정하실 내용을 입력해주세요.")
     private String content;

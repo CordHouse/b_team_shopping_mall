@@ -5,6 +5,8 @@ import com.example.b_team_shopping_mall.dto.Register.*;
 import com.example.b_team_shopping_mall.entity.Authority;
 import com.example.b_team_shopping_mall.entity.RefreshToken;
 import com.example.b_team_shopping_mall.entity.Register;
+import com.example.b_team_shopping_mall.exception.RegisterNotFoundIdException;
+import com.example.b_team_shopping_mall.exception.RegisterNotFoundPasswordException;
 import com.example.b_team_shopping_mall.repository.RefreshTokenRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,17 +26,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RegisterService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final RegisterRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final RegisterRepository registerRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     // 회원가입 명단 전체 조회
     @Transactional(readOnly = true)
     public List<RegisterGetRegistersResponseDto> getRegisters() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        List<Register> register = userRepository.findAll();
+        List<Register> register = registerRepository.findAll();
         List<RegisterGetRegistersResponseDto> registerGetRegistersResponseDtos = new LinkedList<>();
         register.forEach(i -> registerGetRegistersResponseDtos.add(new RegisterGetRegistersResponseDto().toDto(i)));
         return registerGetRegistersResponseDtos;
@@ -41,44 +42,43 @@ public class RegisterService {
 
     // 회원가입 함수
     @Transactional
-    public void signUp(RegisterSignUpRequestDto registerSignUpRequestDto) {
-        Register user = new Register();
-        user.setUserid(registerSignUpRequestDto.getUserid());
-        user.setUsername(registerSignUpRequestDto.getUsername());
-        user.setPassword(passwordEncoder.encode(registerSignUpRequestDto.getPassword()));
-        user.setEmail(registerSignUpRequestDto.getEmail());
-        user.setAuthority(Authority.ROLE_USER);
-        userRepository.save(user);
+    public RegisterSignUpResponseDto signUp(RegisterSignUpRequestDto registerSignUpRequestDto) {
+        Register register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword()), registerSignUpRequestDto.getEmail(), Authority.ROLE_USER);
+        registerRepository.save(register);
+        return new RegisterSignUpResponseDto().toDto(register);
     }
 
     // 로그인 함수
     @Transactional
     public RegisterLoginResponseDto login(RegisterLoginRequestDto registerLoginRequestDto) {
-        Register user = userRepository.findByUserid(registerLoginRequestDto.getUserid()).orElseThrow(() -> {
-            return new IllegalArgumentException("hh");
+        Register register = registerRepository.findByUsername(registerLoginRequestDto.getUsername()).orElseThrow(() -> {
+            throw new RegisterNotFoundIdException();
         });
 
+        if(passwordEncoder.matches(registerLoginRequestDto.getPassword(), register.getPassword())) { // passwordEncoder.matches(받아온 pw, 데베 pw)
 
-        // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
-        UsernamePasswordAuthenticationToken authenticationToken = registerLoginRequestDto.toAuthentication();
+            // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
+            UsernamePasswordAuthenticationToken authenticationToken = registerLoginRequestDto.toAuthentication();
 
-        // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
-        //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
+            //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        // 4. RefreshToken 저장
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);
+            // 4. RefreshToken 저장
+            RefreshToken refreshToken = RefreshToken.builder()
+                    .key(authentication.getName())
+                    .value(tokenDto.getRefreshToken())
+                    .build();
+            refreshTokenRepository.save(refreshToken);
 
-        RegisterLoginResponseDto tokenResponseDto = new RegisterLoginResponseDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
-        // 5. 토큰 발급
-        return tokenResponseDto;
+            RegisterLoginResponseDto tokenResponseDto = new RegisterLoginResponseDto(tokenDto.getAccessToken(), tokenDto.getRefreshToken());
+            // 5. 토큰 발급
+            return tokenResponseDto;
+        }
+        throw new RegisterNotFoundPasswordException();
     }
 
     @Transactional
