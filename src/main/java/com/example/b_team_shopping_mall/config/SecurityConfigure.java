@@ -29,7 +29,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -77,7 +77,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/image/**").permitAll()
                 .antMatchers("/api/auth/sign-up", "/api/auth/login").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/auth").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+                .antMatchers("/api/auth/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 
 
 
