@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/shoppingTeamB
+    url: jdbc:mysql://localhost:3306/shoppingmall
     username: "root"
-    password: ""
+    password: "wldn2468"
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
