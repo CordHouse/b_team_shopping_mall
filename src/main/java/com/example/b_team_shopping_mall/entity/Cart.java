@@ -23,7 +23,7 @@ public class Cart {
     private String item; //상품명
 
     @Column(nullable = false)
-    private  int count; //상품 개수
+    private int count; //상품 개수
 
     @Column(nullable = false)
     private int price; //상품 가격
