@@ -34,23 +34,16 @@ public class Register {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     // 회원가입 생성자 -> id 없이
-    public Register(String username, String userid, String password, String email, String role){
+    public Register(String username, String userid, String password, String email, Authority authority){
         this.username = username;
         this.userid = userid;
         this.password = password;
         this.email = email;
-        this.role = role;
-    }
-
-    public List<String> getRoleList(){
-        if(this.role.length() > 0){
-            return Arrays.asList(this.role.split(","));
-        }
-        return new ArrayList<>();
+        this.authority = authority;
     }
 
 }

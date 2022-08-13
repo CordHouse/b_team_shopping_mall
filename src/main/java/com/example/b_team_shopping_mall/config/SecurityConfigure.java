@@ -1,54 +1,93 @@
 package com.example.b_team_shopping_mall.config;
-import com.example.b_team_shopping_mall.config.jwt.JwtAuthenticationFilter;
-import com.example.b_team_shopping_mall.config.jwt.JwtTokenProvider;
+
+import com.example.b_team_shopping_mall.config.jwt.JwtAccessDeniedHandler;
+import com.example.b_team_shopping_mall.config.jwt.JwtAuthenticationEntryPoint;
+import com.example.b_team_shopping_mall.config.jwt.JwtSecurityConfig;
+import com.example.b_team_shopping_mall.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter {
-    private final CorsFilter corsFilter; // @Bean 설정이 되어 있어서 이렇게 가져올 수 있다.
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception{
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), SecurityContextHolderFilter.class);
-        // 여기서부터는 시큐리티 + JWT 사용시 필수 작성
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**");
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        // CSRF 설정 Disable
         http.csrf().disable();
 
-        // 세션을 사용하지 않겠다.
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-//        .addFilter(corsFilter) // @CrossOrigin(인증x), 인증이 있을 때 -> 시큐리티 필터에 등록 인증 (o)
+        // CORS
+        http.cors().configurationSource(request -> {
+            var cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("http://localhost:3000"));
+            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            cors.setAllowedHeaders(List.of("*"));
+            return cors;
+        });
 
-        .formLogin().disable() // formTag Login을 안한다.
-        .httpBasic().disable() // https -> 보안, 우리는 http이기 때문에 httpBasic을 disable한다.
+        http
+                .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
 
-//        .addFilter(new HeaderResponseFilter())
-                // Bearer -> http 방식, 토큰에 대한 유효시간 존재
-                // 여기서부터는 개발하고자 하는 웹에 맞춰 작성
+        http
+                // exception handling 할 때 우리가 만든 클래스를 추가
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
 
-        .authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/api/auth").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//        .antMatchers("/api/auth").access("hasRole('ROLE_USER')")
-//        .antMatchers("/api/auth/sign-up").hasRole("USER")
-//        .antMatchers("/api/auth/login").hasRole("USER")
-        .anyRequest().permitAll();
+
+                // 시큐리티는 기본적으로 세션을 사용
+                // 여기서는 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
+                .and()
+                .authorizeRequests()
+
+                .antMatchers("/swagger-ui/**", "/v3/**", "/test").permitAll() // swagger
+                .antMatchers(HttpMethod.GET, "/image/**").permitAll()
+                .antMatchers("/api/auth/sign-up", "/api/auth/login").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/api/auth").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+
+
+
+                .anyRequest().hasAnyRole("ROLE_ADMIN")
+//                .anyRequest().authenticated() // 나머지는 전부 인증 필요
+//                .anyRequest().permitAll()   // 나머지는 모두 그냥 접근 가능
+
+                // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
+                .and()
+                .apply(new JwtSecurityConfig(tokenProvider));
+
     }
 }
