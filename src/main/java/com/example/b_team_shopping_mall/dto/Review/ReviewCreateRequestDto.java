@@ -8,8 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 
 public class ReviewCreateRequestDto {
-    private String userid; //사용자 아이디
-
     @NotBlank(message = "구매하신 상품명을 입력해주세요.")
     private String title;
 
@@ -20,7 +18,7 @@ public class ReviewCreateRequestDto {
     private String itemsize;
 
     @NotBlank(message = "평점을 매겨주세요.")
-    private Long score;
+    private String score;
 
     @NotBlank(message = "상품을 리뷰해주세요!")
     private String content;

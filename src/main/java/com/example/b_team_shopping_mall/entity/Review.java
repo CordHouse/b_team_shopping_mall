@@ -30,14 +30,14 @@ public class Review {
     private String itemsize; //상품 사이즈 (free 혹은 숫자)
 
     @Column (nullable = false)
-    private Long score; //평점
+    private String score; //평점
 
     @Column (nullable = false)
     private String content; //상품 리뷰 내용
 
 
     //상품명, 색상, 사이즈, 리뷰 내용을 저장
-    public Review(String title, String itemcolor, String itemsize, Long score, String content){
+    public Review(String title, String itemcolor, String itemsize, String score, String content){
         this.title = title;
         this.itemcolor = itemcolor;
         this.itemsize = itemsize;

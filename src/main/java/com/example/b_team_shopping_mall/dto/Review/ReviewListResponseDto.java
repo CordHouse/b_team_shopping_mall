@@ -13,7 +13,7 @@ public class ReviewListResponseDto {
     private String title;
     private String itemcolor;
     private String itemsize;
-    private Long score;
+    private String score;
     private String content;
     private String writer;
 
