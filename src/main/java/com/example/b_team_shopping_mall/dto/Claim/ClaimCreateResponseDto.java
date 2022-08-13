@@ -15,6 +15,6 @@ public class ClaimCreateResponseDto {
     private String writer;
 
     public ClaimCreateResponseDto toDto(Claim claim) {
-        return new ClaimCreateResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getUsername());
+        return new ClaimCreateResponseDto(claim.getTitle(), claim.getContent(), claim.getRegister().getName());
     }
 }

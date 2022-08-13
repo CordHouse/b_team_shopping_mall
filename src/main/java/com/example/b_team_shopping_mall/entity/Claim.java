@@ -17,13 +17,15 @@ import javax.persistence.*;
 public class Claim {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long number;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
+
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
