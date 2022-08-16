@@ -41,6 +41,18 @@ public class ExceptionAdvice {
         return Response.failure(404, "비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.");
     }
 
+    @ExceptionHandler(RegisterNotFoundSearchEmailException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerNotFoundSearchEmailException(){
+        return Response.failure(404, "이메일이 일치하지 않습니다.");
+    }
+
+    @ExceptionHandler(RegisterNotFoundSearchUsernameException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerNotFoundSearchUsernameException(){
+        return Response.failure(404, "가입한 정보가 없습니다.");
+    }
+
     @ExceptionHandler(CartNotFoundItemListException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response cartNotFoundItemListException(){
