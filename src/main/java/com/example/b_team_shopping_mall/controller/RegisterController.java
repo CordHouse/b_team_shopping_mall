@@ -2,6 +2,7 @@ package com.example.b_team_shopping_mall.controller;
 
 import com.example.b_team_shopping_mall.dto.Register.RegisterLoginRequestDto;
 import com.example.b_team_shopping_mall.dto.Register.RegisterLoginResponseDto;
+import com.example.b_team_shopping_mall.dto.Register.RegisterSearchUsernameRequestDto;
 import com.example.b_team_shopping_mall.dto.Register.RegisterSignUpRequestDto;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.RegisterService;
@@ -15,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class RegisterController {
     private final RegisterService registerService;
 
@@ -29,21 +30,27 @@ public class RegisterController {
     }
 
     // 회원가입 controller
-    @PostMapping("/sign-up")
+    @PostMapping("/auth/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public Response signUp(@RequestBody @Valid RegisterSignUpRequestDto registerSignUpRequestDto){
         return Response.success(registerService.signUp(registerSignUpRequestDto));
     }
 
     // 로그인 controller
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     @ResponseStatus(HttpStatus.OK)
     public Response login(@RequestBody @Valid RegisterLoginRequestDto registerLoginRequestDto){
         return Response.success(registerService.login(registerLoginRequestDto));
     }
 
+    @PostMapping("/username")
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/reissue")
+    public Response searchUsername(@RequestBody @Valid RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
+        return Response.success(registerService.searchUsername(registerSearchUsernameRequestDto));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/auth/reissue")
     public Response reissue(@RequestBody RegisterLoginResponseDto tokenRequestDto) {
         return Response.success(registerService.reissue(tokenRequestDto));
     }
