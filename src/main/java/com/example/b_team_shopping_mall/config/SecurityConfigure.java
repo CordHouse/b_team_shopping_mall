@@ -77,6 +77,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/image/**").permitAll()
                 .antMatchers("/api/auth/sign-up", "/api/auth/login").permitAll()
 
+                .antMatchers("/api/username").permitAll()
+
                 .antMatchers("/api/auth/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 
 
