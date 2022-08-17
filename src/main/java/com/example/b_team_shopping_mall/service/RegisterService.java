@@ -5,20 +5,18 @@ import com.example.b_team_shopping_mall.dto.Register.*;
 import com.example.b_team_shopping_mall.entity.Authority;
 import com.example.b_team_shopping_mall.entity.RefreshToken;
 import com.example.b_team_shopping_mall.entity.Register;
-import com.example.b_team_shopping_mall.exception.RegisterNotFoundIdException;
-import com.example.b_team_shopping_mall.exception.RegisterNotFoundPasswordException;
+import com.example.b_team_shopping_mall.exception.*;
 import com.example.b_team_shopping_mall.repository.RefreshTokenRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,6 +77,27 @@ public class RegisterService {
             return tokenResponseDto;
         }
         throw new RegisterNotFoundPasswordException();
+    }
+
+    @Transactional
+    public RegisterSearchUsernameResponseDto searchUsername(RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
+        // DB 한번 조회
+        List<Register> register = registerRepository.findAllByName(registerSearchUsernameRequestDto.getName()).orElseThrow(() -> {
+            throw new RegisterNotFoundSearchUsernameException();
+        });
+
+        Register searchRegister = register.stream().filter(s -> s.getEmail().equals(registerSearchUsernameRequestDto.getEmail())).findFirst().orElseThrow(() -> {
+            throw new RegisterNotFoundSearchEmailException();
+        });
+
+        // DB 두번조회...
+//        registerRepository.findByEmail(registerSearchUsernameRequestDto.getEmail()).orElseThrow(() -> {
+//            throw new RegisterNotFoundSearchEmailException();
+//        });
+//        Register register = registerRepository.findByNameAndEmail(registerSearchUsernameRequestDto.getName(), registerSearchUsernameRequestDto.getEmail()).orElseThrow(() -> {
+//            throw new RegisterNotFoundSearchUsernameException();
+//        });
+        return new RegisterSearchUsernameResponseDto().toDto(searchRegister);
     }
 
     @Transactional
