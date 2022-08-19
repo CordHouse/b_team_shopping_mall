@@ -3,8 +3,10 @@ package com.example.b_team_shopping_mall.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,16 +36,29 @@ public class Register {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // 유저 권한
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Column(nullable = false)
+    private String temppassword;
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDate createDate;
+
     // 회원가입 생성자 -> id 없이
-    public Register(String name, String username, String password, String email, Authority authority){
+    public Register(String name, String username, String password, String email, Authority authority, String temppassword){
         this.name = name;
         this.username = username;
         this.password = password;
         this.email = email;
         this.authority = authority;
+        this.temppassword = temppassword;
+    }
+
+    @PrePersist // DB에 Insert 되기 직전에 실행된다.
+    public void createDate(){
+        this.createDate = LocalDate.now();
     }
 
 }

@@ -1,9 +1,6 @@
 package com.example.b_team_shopping_mall.controller;
 
-import com.example.b_team_shopping_mall.dto.Register.RegisterLoginRequestDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterLoginResponseDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterSearchUsernameRequestDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterSignUpRequestDto;
+import com.example.b_team_shopping_mall.dto.Register.*;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.RegisterService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +44,18 @@ public class RegisterController {
     @ResponseStatus(HttpStatus.OK)
     public Response searchUsername(@RequestBody @Valid RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
         return Response.success(registerService.searchUsername(registerSearchUsernameRequestDto));
+    }
+
+    @PostMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchUserPassword(@RequestBody @Valid RegisterSearchUserPasswordRequestDto registerSearchUserPasswordRequestDto){
+        return Response.success(registerService.searchUserPassword(registerSearchUserPasswordRequestDto));
+    }
+
+    @PutMapping("/auth/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Response changeUserPassword(@RequestBody @Valid RegisterChangeUserPasswordRequestDto registerChangeUserPasswordRequestDto){
+        return Response.success(registerService.changeUserPassword(registerChangeUserPasswordRequestDto));
     }
 
     @ResponseStatus(HttpStatus.OK)
