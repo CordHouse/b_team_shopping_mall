@@ -1,9 +1,6 @@
 package com.example.b_team_shopping_mall.controller;
 
-import com.example.b_team_shopping_mall.dto.Register.RegisterLoginRequestDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterLoginResponseDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterSearchUsernameRequestDto;
-import com.example.b_team_shopping_mall.dto.Register.RegisterSignUpRequestDto;
+import com.example.b_team_shopping_mall.dto.Register.*;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.RegisterService;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +18,9 @@ public class RegisterController {
     private final RegisterService registerService;
 
     // 회원가입 명단 전체 조회
-    @GetMapping
+    @GetMapping("/auth")
     @ResponseStatus(HttpStatus.OK)
     public Response getRegisters(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
         return Response.success(registerService.getRegisters());
     }
 
@@ -43,10 +38,22 @@ public class RegisterController {
         return Response.success(registerService.login(registerLoginRequestDto));
     }
 
-    @PostMapping("/username")
+    @PostMapping("/find/username")
     @ResponseStatus(HttpStatus.OK)
     public Response searchUsername(@RequestBody @Valid RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
         return Response.success(registerService.searchUsername(registerSearchUsernameRequestDto));
+    }
+
+    @PostMapping("/find/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchUserPassword(@RequestBody @Valid RegisterSearchUserPasswordRequestDto registerSearchUserPasswordRequestDto){
+        return Response.success(registerService.searchUserPassword(registerSearchUserPasswordRequestDto));
+    }
+
+    @PutMapping("/auth/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Response changeUserPassword(@RequestBody @Valid RegisterChangeUserPasswordRequestDto registerChangeUserPasswordRequestDto){
+        return Response.success(registerService.changeUserPassword(registerChangeUserPasswordRequestDto));
     }
 
     @ResponseStatus(HttpStatus.OK)

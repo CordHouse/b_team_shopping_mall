@@ -77,8 +77,10 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/image/**").permitAll()
                 .antMatchers("/api/auth/sign-up", "/api/auth/login").permitAll()
 
-                .antMatchers("/api/username").permitAll()
+                .antMatchers("/api/find/username", "/api/find/password").permitAll()
+                .antMatchers("/api/categories/**").permitAll()
 
+                .antMatchers(HttpMethod.GET, "/api/auth").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // 전체 조회는 권한 있는 사람만
                 .antMatchers("/api/auth/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 
 

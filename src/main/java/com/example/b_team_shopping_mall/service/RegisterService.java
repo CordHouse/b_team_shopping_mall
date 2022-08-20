@@ -9,13 +9,17 @@ import com.example.b_team_shopping_mall.exception.*;
 import com.example.b_team_shopping_mall.repository.RefreshTokenRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,6 +102,30 @@ public class RegisterService {
 //            throw new RegisterNotFoundSearchUsernameException();
 //        });
         return new RegisterSearchUsernameResponseDto().toDto(searchRegister);
+    }
+
+    @Transactional
+    public RegisterSearchUserPasswordResponseDto searchUserPassword(RegisterSearchUserPasswordRequestDto registerSearchUserPasswordRequestDto){
+        Register register = registerRepository.findByUsername(registerSearchUserPasswordRequestDto.getUsername()).orElseThrow(() -> {
+            throw new RegisterNotFoundSearchUserPasswordException();
+        });
+        LocalTime localTimeNow = LocalTime.now();
+        String tempPassword = localTimeNow.toString().replaceAll("[^0-9]","");
+        register.setPassword(passwordEncoder.encode(tempPassword)); // 보안상의 문제로 임시 비밀번호 발급
+        return new RegisterSearchUserPasswordResponseDto().toDto(register, tempPassword);
+    }
+
+    @Transactional
+    public String changeUserPassword(RegisterChangeUserPasswordRequestDto registerChangeUserPasswordRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Register register = registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
+            throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
+        });
+        if (passwordEncoder.matches(registerChangeUserPasswordRequestDto.getBeforePassword(), register.getPassword())) {
+            register.setPassword(passwordEncoder.encode(registerChangeUserPasswordRequestDto.getAfterPassword()));
+            return "비밀번호가 정상적으로 변경되었습니다.";
+        }
+        return "임시 비밀번호가 일치하지 않습니다.";
     }
 
     @Transactional

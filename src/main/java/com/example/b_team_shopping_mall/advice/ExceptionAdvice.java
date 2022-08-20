@@ -53,6 +53,12 @@ public class ExceptionAdvice {
         return Response.failure(404, "가입한 정보가 없습니다.");
     }
 
+    @ExceptionHandler(RegisterNotFoundSearchUserPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerNotFoundSearchUserPasswordException(){
+        return Response.failure(404, "일치하는 회원정보가 없습니다.");
+    }
+
     @ExceptionHandler(CartNotFoundItemListException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response cartNotFoundItemListException(){
