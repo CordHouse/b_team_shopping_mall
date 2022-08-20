@@ -4,6 +4,7 @@ import com.example.b_team_shopping_mall.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository 는 JPA를 이용해서 데이터베이스에서 데이터를 불러오거나 저장하는 용도입니다.
@@ -13,5 +14,6 @@ import java.util.List;
  */
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> getCategories();
+    Optional<List<Category>> findAllByCategory(String category);
 }
+

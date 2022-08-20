@@ -1,11 +1,15 @@
 package com.example.b_team_shopping_mall.controller;
 
+import com.example.b_team_shopping_mall.dto.Category.CategoryGetRequestDto;
+import com.example.b_team_shopping_mall.dto.Category.CategoryGetResponseDto;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.Valid;
 
 /**
  * Controller 는 클라이언트(사용자)의 요청을 받는 클래스입니다.
@@ -22,11 +26,11 @@ public class CategoryController {
     // 품목 전체 조회
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/api/categories/items")
-    public Response getCategories() { return Response.success(categoryService.getCategories()); }
+    public Response getCategories() { return Response.success(categoryService.findAll()); }
 
     // 품목별 조회
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/api/categories/items/{category}")
-    public Response getCategory(@PathVariable String category) { return Response.success(categoryService.getCategory(category)); }
+    public Response getCategory(@PathVariable @Valid CategoryGetRequestDto categoryGetRequestDto) { return Response.success(categoryService.getCategory(categoryGetRequestDto)); }
 
 }

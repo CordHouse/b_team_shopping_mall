@@ -1,5 +1,6 @@
 package com.example.b_team_shopping_mall.service;
 
+import com.example.b_team_shopping_mall.dto.Category.CategoryGetRequestDto;
 import com.example.b_team_shopping_mall.dto.Category.CategoryGetResponseDto;
 import com.example.b_team_shopping_mall.dto.Category.CategoryListResponseDto;
 import com.example.b_team_shopping_mall.entity.Category;
@@ -9,7 +10,8 @@ import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,19 +29,17 @@ public class CategoryService {
     private final RegisterRepository registerRepository;
 
     // 품목 전체조회
-    @Transactional
-    public List<CategoryListResponseDto> getCategories(List<CategoryListResponseDto> categoryListResponseDtoList, List<CategoryListResponseDto> categoryResponseDtoList) {
-        List<Category> Category = categoryRepository.getCategories();
-        //categoryListResponseDtoList = new ArrayList<>();
-//        getCategories(categoryListResponseDtoList, categoryResponseDtoList).stream().forEach(i -> categoryListResponseDtoList.add(new CategoryListResponseDto().toDto(i)));
-//        return categoryResponseDtoList;
-            return categoryRepository.getCategories().stream().map(s -> new CategoryListResponseDto().toDto(s)).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<CategoryListResponseDto> findAll() {
+        return categoryRepository.findAll().stream().map(s -> new CategoryListResponseDto().toDto(s)).collect(Collectors.toList());
     }
 
     // 품목별 조회
-    @Transactional
-    public CategoryGetResponseDto getCategory() {
-        Category category = categoryRepository.getCategory(category).orElseThrow(CategoryNotFoundException::new);
-        return new CategoryGetResponseDto().toDto(category);
+    @Transactional(readOnly = true)
+    public List<CategoryGetResponseDto> getCategory(CategoryGetRequestDto categoryGetRequestDto) {
+        List<Category> category = categoryRepository.findAllByCategory(categoryGetRequestDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        List<CategoryGetResponseDto> categoryGetResponseDtos = new ArrayList<>();
+        category.stream().forEach(i->categoryGetResponseDtos.add(new CategoryGetResponseDto().toDto(i)));
+        return categoryGetResponseDtos;
     }
 }
