@@ -12,7 +12,7 @@ public class RegisterSearchUserPasswordResponseDto {
     private Long id;
     private String password;
 
-    public RegisterSearchUserPasswordResponseDto toDto(Register register){
-        return new RegisterSearchUserPasswordResponseDto(register.getId(), register.getPassword());
+    public RegisterSearchUserPasswordResponseDto toDto(Register register, String password){
+        return new RegisterSearchUserPasswordResponseDto(register.getId(), password);
     }
 }

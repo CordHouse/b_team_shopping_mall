@@ -18,11 +18,9 @@ public class RegisterController {
     private final RegisterService registerService;
 
     // 회원가입 명단 전체 조회
-    @GetMapping
+    @GetMapping("/auth")
     @ResponseStatus(HttpStatus.OK)
     public Response getRegisters(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
         return Response.success(registerService.getRegisters());
     }
 
@@ -40,13 +38,13 @@ public class RegisterController {
         return Response.success(registerService.login(registerLoginRequestDto));
     }
 
-    @PostMapping("/username")
+    @PostMapping("/find/username")
     @ResponseStatus(HttpStatus.OK)
     public Response searchUsername(@RequestBody @Valid RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
         return Response.success(registerService.searchUsername(registerSearchUsernameRequestDto));
     }
 
-    @PostMapping("/password")
+    @PostMapping("/find/password")
     @ResponseStatus(HttpStatus.OK)
     public Response searchUserPassword(@RequestBody @Valid RegisterSearchUserPasswordRequestDto registerSearchUserPasswordRequestDto){
         return Response.success(registerService.searchUserPassword(registerSearchUserPasswordRequestDto));

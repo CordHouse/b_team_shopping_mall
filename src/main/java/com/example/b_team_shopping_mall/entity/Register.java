@@ -40,20 +40,16 @@ public class Register {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @Column(nullable = false)
-    private String temppassword;
-
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
 
     // 회원가입 생성자 -> id 없이
-    public Register(String name, String username, String password, String email, Authority authority, String temppassword){
+    public Register(String name, String username, String password, String email, Authority authority){
         this.name = name;
         this.username = username;
         this.password = password;
         this.email = email;
         this.authority = authority;
-        this.temppassword = temppassword;
     }
 
     @PrePersist // DB에 Insert 되기 직전에 실행된다.

@@ -9,6 +9,7 @@ import com.example.b_team_shopping_mall.exception.*;
 import com.example.b_team_shopping_mall.repository.RefreshTokenRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class RegisterService {
     // 회원가입 함수
     @Transactional
     public RegisterSignUpResponseDto signUp(RegisterSignUpRequestDto registerSignUpRequestDto) {
-        Register register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword()), registerSignUpRequestDto.getEmail(), Authority.ROLE_USER, "false");
+        Register register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword()), registerSignUpRequestDto.getEmail(), Authority.ROLE_USER);
         registerRepository.save(register);
         return new RegisterSignUpResponseDto().toDto(register);
     }
@@ -55,8 +57,7 @@ public class RegisterService {
             throw new RegisterNotFoundIdException();
         });
 
-        if(passwordEncoder.matches(registerLoginRequestDto.getPassword(), register.getPassword()) ||
-                (register.getTemppassword().equals("true")) && register.getPassword().equals(registerLoginRequestDto.getPassword())) { // passwordEncoder.matches(받아온 pw, 데베 pw)
+        if(passwordEncoder.matches(registerLoginRequestDto.getPassword(), register.getPassword())) { // passwordEncoder.matches(받아온 pw, 데베 pw)
 
             // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
             UsernamePasswordAuthenticationToken authenticationToken = registerLoginRequestDto.toAuthentication();
@@ -109,9 +110,9 @@ public class RegisterService {
             throw new RegisterNotFoundSearchUserPasswordException();
         });
         LocalTime localTimeNow = LocalTime.now();
-        register.setPassword(passwordEncoder.encode(localTimeNow.toString())); // 보안상의 문제로 임시 비밀번호 발급
-        register.setTemppassword("true"); // 임시 비밀번호 사용 중
-        return new RegisterSearchUserPasswordResponseDto().toDto(register);
+        String tempPassword = localTimeNow.toString().replaceAll("[^0-9]","");
+        register.setPassword(passwordEncoder.encode(tempPassword)); // 보안상의 문제로 임시 비밀번호 발급
+        return new RegisterSearchUserPasswordResponseDto().toDto(register, tempPassword);
     }
 
     @Transactional
@@ -120,9 +121,8 @@ public class RegisterService {
         Register register = registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
             throw new IllegalArgumentException("아이디가 존재하지 않습니다.");
         });
-        if(register.getPassword().equals(registerChangeUserPasswordRequestDto.getBeforePassword())) {
+        if (passwordEncoder.matches(registerChangeUserPasswordRequestDto.getBeforePassword(), register.getPassword())) {
             register.setPassword(passwordEncoder.encode(registerChangeUserPasswordRequestDto.getAfterPassword()));
-            register.setTemppassword("false");
             return "비밀번호가 정상적으로 변경되었습니다.";
         }
         return "임시 비밀번호가 일치하지 않습니다.";
