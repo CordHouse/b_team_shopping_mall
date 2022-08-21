@@ -5,6 +5,7 @@ import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.entity.Review;
 import com.example.b_team_shopping_mall.exception.ReviewListEmptyException;
 import com.example.b_team_shopping_mall.exception.ReviewNotFoundException;
+import com.example.b_team_shopping_mall.exception.UserNotCorrectException;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import com.example.b_team_shopping_mall.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -59,18 +61,22 @@ public class ReviewService {
     }
 
     //리뷰 수정
-    @Transactional(readOnly = true)
+    @Transactional
     public ReviewEditResponseDto editReviews(Long id, ReviewEditRequestDto requestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Review findReview = reviewRepository.findByRegister(registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
-            throw new IllegalArgumentException("해당 유저가 존재하지 않습니다.");
-        })).orElseThrow(ReviewNotFoundException::new);
 
-        //상품명과 옵션(색상, 사이즈)은 수정 불가능
-        findReview.setScore(requestDto.getScore());
-        findReview.setContent(requestDto.getContent());
+        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
 
-        return new ReviewEditResponseDto().toDto(findReview);
+        String user = authentication.getName();
+
+        if(!review.getRegister().getUsername().equals(user)) {
+            throw new UserNotCorrectException();
+        }
+
+        review.setContent(requestDto.getContent());
+        review.setScore(requestDto.getScore());
+
+        return new ReviewEditResponseDto().toDto(review);
     }
 
     //리뷰 삭제
