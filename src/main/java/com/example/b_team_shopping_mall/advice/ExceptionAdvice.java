@@ -28,6 +28,11 @@ public class ExceptionAdvice {
         return Response.failure(404, "해당 사용자가 작성한 문의글이 존재하지 않습니다.");
     }
 
+    @ExceptionHandler(RegisterOverlapException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response registerOverlapException(){
+        return Response.failure(404, "사용할 수 없는 아이디입니다.");
+    }
 
     @ExceptionHandler(RegisterNotFoundIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

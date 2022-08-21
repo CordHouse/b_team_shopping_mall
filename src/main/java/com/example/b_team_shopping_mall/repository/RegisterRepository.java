@@ -9,8 +9,8 @@ import java.util.Optional;
 // 회원가입 JPA -> Register/ Long
 public interface RegisterRepository extends JpaRepository<Register, Long> {
     Optional<Register> findByUsername(String username);
-    Optional<Register> findByNameAndEmail(String name, String email);
-    Optional<Register> findByEmail(String email);
+    Optional<Register> findByUsernameAndEmail(String username, String email);
+    List<Register> findAllByUsername(String username);
 
     Optional<List<Register>> findAllByName(String name);
 }

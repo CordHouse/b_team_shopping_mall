@@ -33,6 +33,15 @@ public class RegisterService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
+    public RegisterAdminResponseDto admin(RegisterAdminRequestDto registerAdminRequestDto){
+        Register register = registerRepository.findByUsername(registerAdminRequestDto.getUsername()).orElseThrow(() -> {
+            throw new RegisterNotFoundSearchUsernameException();
+        });
+        register.setAuthority(Authority.ROLE_MANAGER);
+        return new RegisterAdminResponseDto().toDto(register);
+    }
+
     // 회원가입 명단 전체 조회
     @Transactional(readOnly = true)
     public List<RegisterGetRegistersResponseDto> getRegisters() {
@@ -45,7 +54,19 @@ public class RegisterService {
     // 회원가입 함수
     @Transactional
     public RegisterSignUpResponseDto signUp(RegisterSignUpRequestDto registerSignUpRequestDto) {
-        Register register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword()), registerSignUpRequestDto.getEmail(), Authority.ROLE_USER);
+        List<Register> registerFilter = registerRepository.findAllByUsername(registerSignUpRequestDto.getUsername());
+
+        if(!registerFilter.isEmpty())
+            throw new RegisterOverlapException();
+
+        Register register;
+        if(registerSignUpRequestDto.getUsername().toLowerCase().equals("admin")){
+            register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword().toLowerCase()), registerSignUpRequestDto.getEmail(), Authority.ROLE_ADMIN);
+            registerRepository.save(register);
+            return new RegisterSignUpResponseDto().toDto(register);
+        }
+
+        register = new Register(registerSignUpRequestDto.getName(), registerSignUpRequestDto.getUsername(), passwordEncoder.encode(registerSignUpRequestDto.getPassword()), registerSignUpRequestDto.getEmail(), Authority.ROLE_USER);
         registerRepository.save(register);
         return new RegisterSignUpResponseDto().toDto(register);
     }
@@ -86,9 +107,10 @@ public class RegisterService {
     @Transactional
     public RegisterSearchUsernameResponseDto searchUsername(RegisterSearchUsernameRequestDto registerSearchUsernameRequestDto){
         // DB 한번 조회
-        List<Register> register = registerRepository.findAllByName(registerSearchUsernameRequestDto.getName()).orElseThrow(() -> {
+        List<Register> register = registerRepository.findAllByName(registerSearchUsernameRequestDto.getName()).orElseThrow();
+
+        if(register.isEmpty())
             throw new RegisterNotFoundSearchUsernameException();
-        });
 
         Register searchRegister = register.stream().filter(s -> s.getEmail().equals(registerSearchUsernameRequestDto.getEmail())).findFirst().orElseThrow(() -> {
             throw new RegisterNotFoundSearchEmailException();
@@ -106,7 +128,7 @@ public class RegisterService {
 
     @Transactional
     public RegisterSearchUserPasswordResponseDto searchUserPassword(RegisterSearchUserPasswordRequestDto registerSearchUserPasswordRequestDto){
-        Register register = registerRepository.findByUsername(registerSearchUserPasswordRequestDto.getUsername()).orElseThrow(() -> {
+        Register register = registerRepository.findByUsernameAndEmail(registerSearchUserPasswordRequestDto.getUsername(), registerSearchUserPasswordRequestDto.getEmail()).orElseThrow(() -> {
             throw new RegisterNotFoundSearchUserPasswordException();
         });
         LocalTime localTimeNow = LocalTime.now();
