@@ -6,9 +6,9 @@
 ---
 # 2. Project Info
 - Sing Up & Login | ( 회원가입 & 로그인 )
-- Wish List | ( 찜 목록 )
+- Product | ( 물품 )
 - Shopping Basket | ( 장바구니 )
-- Item Lookup & Edit Personal Information | ( 품목 조회 & 회원정보 수정 )
+- Item Category | ( 품목 조회 )
 - Review | ( 리뷰 )
 - Service Center | ( 고객 센터 )
 ---
@@ -18,9 +18,9 @@ Mentor : [이재윤](https://github.com/sosow0212)
 **team member in charge** | **Role**
 
 - [이지우](https://github.com/CordHouse) | Sing Up & Login
-- [이준](https://github.com/JuneBori) | Wish List
+- [이준](https://github.com/JuneBori) | Product
 - [김수인](https://github.com/lsuinl) | Shopping Basket
-- [안지유](https://github.com/zzzzzuuuuu) | Item Lookup & Edit Personal Information
+- [안지유](https://github.com/zzzzzuuuuu) | Item Category
 - [김효선](https://github.com/hy5sun) | Review
 - [이민섭](https://github.com/chrkb1569) | Service Center
 ---
@@ -42,9 +42,9 @@ Mentor : [이재윤](https://github.com/sosow0212)
 ```text
 < Implement >
 1. Sign Up & Login | 회원가입 & 로그인
-2. Wish List | 찜 목록
+2. Product | 물품
 3. Shopping Basket | 장바구니
-4. Item Lookup & Edit Personal Information | 품목 조회 & 회원정보 수정
+4. Item Category | 품목 조회
 5. Review | 리뷰
 6. Service Center | 고객 센터
 ```
