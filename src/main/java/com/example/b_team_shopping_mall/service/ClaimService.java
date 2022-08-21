@@ -5,6 +5,7 @@ import com.example.b_team_shopping_mall.entity.Claim;
 import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.exception.ClaimEmptyException;
 import com.example.b_team_shopping_mall.exception.ClaimNotFoundException;
+import com.example.b_team_shopping_mall.exception.UserNotCorrectException;
 import com.example.b_team_shopping_mall.repository.ClaimRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,6 @@ public class ClaimService {
 
     @Transactional(readOnly = true)
     public List<ClaimListResponseDto> findAll() {
-
         List<ClaimListResponseDto> claims = claimRepository.findAll()
                 .stream().map(s -> new ClaimListResponseDto().toDto(s)).collect(Collectors.toList());
 
@@ -39,6 +39,7 @@ public class ClaimService {
     @Transactional(readOnly = true)
     public ClaimGetResponseDto findBoard(Long id) {
         Claim claim = claimRepository.findById(id).orElseThrow(ClaimNotFoundException::new);
+
         return new ClaimGetResponseDto().toDto(claim);
     }
     @Transactional
@@ -61,6 +62,14 @@ public class ClaimService {
     @Transactional
     public ClaimEditResponseDto edit(ClaimEditRequestDto requestDto, Long id) {
         Claim findItem = claimRepository.findById(id).orElseThrow(ClaimNotFoundException::new);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String user = authentication.getName();
+
+        if(!findItem.getRegister().getUsername().equals(user)) {
+            throw new UserNotCorrectException();
+        }
 
         findItem.setTitle(requestDto.getTitle());
         findItem.setContent(requestDto.getContent());

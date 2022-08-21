@@ -1,4 +1,4 @@
 package com.example.b_team_shopping_mall.exception;
 
-public class CategoryNotFoundException extends RuntimeException {
+public class CategoryNotFoundException extends RuntimeException{
 }

@@ -3,6 +3,7 @@ package com.example.b_team_shopping_mall.service;
 import com.example.b_team_shopping_mall.dto.Review.*;
 import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.entity.Review;
+import com.example.b_team_shopping_mall.exception.ReviewListEmptyException;
 import com.example.b_team_shopping_mall.exception.ReviewNotFoundException;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 import com.example.b_team_shopping_mall.repository.ReviewRepository;
@@ -28,6 +29,11 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findAll();
         List<ReviewListResponseDto> reviewListResponseDtoList = new ArrayList<>();
         reviews.stream().forEach(i -> reviewListResponseDtoList.add(new ReviewListResponseDto().toDto(i)));
+
+        if(reviewListResponseDtoList.isEmpty()) {
+            throw new ReviewListEmptyException();
+        }
+
         return reviewListResponseDtoList;
     }
 

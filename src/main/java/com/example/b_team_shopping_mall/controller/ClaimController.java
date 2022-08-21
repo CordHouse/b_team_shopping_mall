@@ -50,7 +50,9 @@ public class ClaimController {
     // 문의글 삭제
     @DeleteMapping("/claims/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBoard(@PathVariable Long id) {
+    public Response deleteBoard(@PathVariable Long id) {
         claimService.delete(id);
+
+        return Response.success("id " + id + "인 문의글을 삭제하였습니다.");
     }
 }
