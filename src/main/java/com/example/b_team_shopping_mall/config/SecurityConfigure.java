@@ -73,22 +73,13 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .antMatchers("/swagger-ui/**", "/v3/**", "/test").permitAll() // swagger
-                .antMatchers(HttpMethod.GET, "/image/**").permitAll()
+                .antMatchers("/api/auth/admin").access("hasRole('ROLE_ADMIN')") // 전체 조회는 권한 있는 사람만
+                .antMatchers("/api/auth/manager/**").access("hasRole('ROLE_MANAGER')") // 전체 조회는 권한 있는 사람만
                 .antMatchers("/api/auth/sign-up", "/api/auth/login").permitAll()
-
                 .antMatchers("/api/find/username", "/api/find/password").permitAll()
                 .antMatchers("/api/product/**").permitAll()
                 .antMatchers("/api/category/**").permitAll()
-
-                .antMatchers(HttpMethod.GET, "/api/auth").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") // 전체 조회는 권한 있는 사람만
-                .antMatchers("/api/auth/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-
-
-
-                .anyRequest().hasAnyRole("ROLE_ADMIN")
-//                .anyRequest().authenticated() // 나머지는 전부 인증 필요
-//                .anyRequest().permitAll()   // 나머지는 모두 그냥 접근 가능
+                .antMatchers("/api/auth/**").access("hasRole('ROLE_USER')")
 
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
                 .and()
