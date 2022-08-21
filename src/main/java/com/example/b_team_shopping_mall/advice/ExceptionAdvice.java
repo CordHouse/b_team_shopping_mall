@@ -70,4 +70,46 @@ public class ExceptionAdvice {
     public Response cartNotFoundItemException(){
         return Response.failure(404, "삭제할 품목이 없습니다.");
     }
+
+    @ExceptionHandler(ProductListEmptyException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response productListEmptyException() {
+        return Response.failure(404, "품목이 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(CategoryProductListEmptyException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Response categoryProductListEmptyException() {
+        return Response.failure(404, "해당 카테고리에 해당하는 품목이 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Response productNotFoundException() {
+        return Response.failure(404, "해당 ID에 해당하는 품목이 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response categoryNotFoundException() {
+        return Response.failure(404, "해당 카테고리를 찾지 못하였습니다.");
+    }
+
+    @ExceptionHandler(CategoryListEmptyException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response categoryListEmptyException() {
+        return Response.failure(404, "카테고리가 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(ReviewListEmptyException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Response reviewListEmptyException() {
+        return Response.failure(404, "리뷰가 존재하지 않습니다.");
+    }
+
+    @ExceptionHandler(UserNotCorrectException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Response userNotCorrectException() {
+        return Response.failure(404, "현재 로그인한 사용자와 작성자가 일치하지 않습니다.");
+    }
 }

@@ -1,36 +1,44 @@
 package com.example.b_team_shopping_mall.controller;
 
-import com.example.b_team_shopping_mall.dto.Category.CategoryGetRequestDto;
-import com.example.b_team_shopping_mall.dto.Category.CategoryGetResponseDto;
+import com.example.b_team_shopping_mall.dto.Category.CategoryCreateRequestDto;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-/**
- * Controller 는 클라이언트(사용자)의 요청을 받는 클래스입니다.
- * Controller에서는 서비스 클래스 (기능 구현된 클래스) 를 불러서 사용자의 요청을 처리합니다.
- *
- * @Controller 는 템플릿 엔진(JSP, Thymeleaf 등등) 사용할 때 주로 쓰이고,
- * @RestController 는 API 서버를 만들 때 주로 사용됩니다. 저희는 API 서버를 만드니 RestController 로 진행합니다.
- */
-
-
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
 public class CategoryController {
-    private CategoryService categoryService;
 
-    // 품목 전체 조회
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/api/categories/items")
-    public Response getCategories() { return Response.success(categoryService.findAll()); }
+    private final CategoryService categoryService;
 
-    // 품목별 조회
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/api/categories/items/{category}")
-    public Response getCategory(@PathVariable @Valid CategoryGetRequestDto categoryGetRequestDto) { return Response.success(categoryService.getCategory(categoryGetRequestDto)); }
+    @GetMapping("/category")
+    @ResponseStatus(HttpStatus.OK) // 전체 카테고리 조회
+    public Response categories() {
+        return Response.success(categoryService.findAll());
+    }
 
+    @GetMapping("/category/{id}")
+    @ResponseStatus(HttpStatus.OK) // 단일 카테고리 조회
+    public Response getCategory(@PathVariable Long id) {
+        return Response.success(categoryService.findCategory(id));
+    }
+
+    @PostMapping("/category")
+    @ResponseStatus(HttpStatus.CREATED) // 카테고리 생성
+    public Response createCategory(@RequestBody @Valid CategoryCreateRequestDto requestDto) {
+        return Response.success(categoryService.save(requestDto));
+    }
+
+    @DeleteMapping("/category/{id}")
+    @ResponseStatus(HttpStatus.OK) // 특정 카테고리 삭제
+    public Response delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return Response.success("id = " + id + "인 부류가 삭제되었습니다.");
+    }
 }

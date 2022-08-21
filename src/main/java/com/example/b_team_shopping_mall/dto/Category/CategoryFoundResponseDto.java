@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class CategoryListResponseDto {
-
+public class CategoryFoundResponseDto {
     private String category;
 
-    public CategoryListResponseDto toDto(Category category) {
-        return new CategoryListResponseDto(category.getCategory());
+    public CategoryFoundResponseDto toDto(Category category) {
+        return new CategoryFoundResponseDto(category.getCategory());
     }
 }
