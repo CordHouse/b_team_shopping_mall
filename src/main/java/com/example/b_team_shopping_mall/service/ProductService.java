@@ -4,10 +4,12 @@ import com.example.b_team_shopping_mall.dto.Product.ProductCategoryListDto;
 import com.example.b_team_shopping_mall.dto.Product.ProductCreateRequestDto;
 import com.example.b_team_shopping_mall.dto.Product.ProductCreateResponseDto;
 import com.example.b_team_shopping_mall.dto.Product.ProductListDto;
+import com.example.b_team_shopping_mall.entity.Cart;
 import com.example.b_team_shopping_mall.entity.Category;
 import com.example.b_team_shopping_mall.entity.Product;
 import com.example.b_team_shopping_mall.entity.Register;
 import com.example.b_team_shopping_mall.exception.*;
+import com.example.b_team_shopping_mall.repository.CartRepository;
 import com.example.b_team_shopping_mall.repository.CategoryRepository;
 import com.example.b_team_shopping_mall.repository.ProductRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
@@ -70,11 +72,25 @@ public class ProductService {
         Product product = Product.builder()
                 .item(requestDto.getItem())
                 .price(requestDto.getPrice())
+                .count(requestDto.getCount())
                 .register(register)
                 .category(category)
                 .build();
 
         productRepository.save(product);
+
+        return new ProductCreateResponseDto().toDto(product);
+    }
+
+    @Transactional
+    public ProductCreateResponseDto editProduct(ProductCreateRequestDto productCreateRequestDto){
+        Product product = productRepository.findByItem(productCreateRequestDto.getItem()).orElseThrow(() -> {
+            throw new ProductNotFoundItemException();
+        });
+        product.setItem(productCreateRequestDto.getItem());
+        product.setCategory(new Category(productCreateRequestDto.getCategory()));
+        product.setCount(productCreateRequestDto.getCount());
+        product.setPrice(productCreateRequestDto.getPrice());
 
         return new ProductCreateResponseDto().toDto(product);
     }

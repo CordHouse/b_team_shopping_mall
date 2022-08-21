@@ -11,15 +11,17 @@ import lombok.NoArgsConstructor;
 public class ProductListDto {
     private Long id;
 
+    private String category;
+
     private String item;
 
-    private Long price;
+    private int price;
+
+    private int count;
 
     private String name;
 
-    private String category;
-
     public ProductListDto toDto(Product product) {
-        return new ProductListDto(product.getId(), product.getItem(), product.getPrice(), product.getRegister().getName(), product.getCategory().getCategory());
+        return new ProductListDto(product.getId(), product.getCategory().getCategory(), product.getItem(), product.getPrice(), product.getCount(), product.getRegister().getName());
     }
 }

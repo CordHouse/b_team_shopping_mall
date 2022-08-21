@@ -20,11 +20,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String item;
 
-    @Column (nullable = false)
-    private Long price;
+    @Column(nullable = false)
+    private int price;
+
+    @Column(nullable = false)
+    private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

@@ -10,18 +10,23 @@ import lombok.NoArgsConstructor;
 @Data
 public class ProductCreateResponseDto {
 
+    private String category;
+
     private String item;
 
-    private Long price;
+    private int price;
+
+    private int count;
 
     private String name;
 
-    private String category;
-
     public ProductCreateResponseDto toDto(Product product) {
         return new ProductCreateResponseDto(
-                product.getItem(), product.getPrice(),
-                product.getRegister().getName(), product.getCategory().getCategory()
+                product.getCategory().getCategory(),
+                product.getItem(),
+                product.getPrice(),
+                product.getCount(),
+                product.getRegister().getName()
         );
     }
 }
