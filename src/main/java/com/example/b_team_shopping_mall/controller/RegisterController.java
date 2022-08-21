@@ -17,8 +17,14 @@ import javax.validation.Valid;
 public class RegisterController {
     private final RegisterService registerService;
 
+    @PostMapping("/auth/admin")
+    @ResponseStatus(HttpStatus.OK)
+    public Response admin(@RequestBody @Valid RegisterAdminRequestDto registerAdminRequestDto){
+        return Response.success(registerService.admin(registerAdminRequestDto));
+    }
+
     // 회원가입 명단 전체 조회
-    @GetMapping("/auth")
+    @GetMapping("/auth/manager")
     @ResponseStatus(HttpStatus.OK)
     public Response getRegisters(){
         return Response.success(registerService.getRegisters());
