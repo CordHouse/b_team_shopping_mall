@@ -29,13 +29,13 @@ public class CategoryController {
         return Response.success(categoryService.findCategory(id));
     }
 
-    @PostMapping("/category")
+    @PostMapping("/auth/manager/category")
     @ResponseStatus(HttpStatus.CREATED) // 카테고리 생성
     public Response createCategory(@RequestBody @Valid CategoryCreateRequestDto requestDto) {
         return Response.success(categoryService.save(requestDto));
     }
 
-    @DeleteMapping("/category/{id}")
+    @DeleteMapping("/auth/manager/category/{id}")
     @ResponseStatus(HttpStatus.OK) // 특정 카테고리 삭제
     public Response delete(@PathVariable Long id) {
         categoryService.delete(id);

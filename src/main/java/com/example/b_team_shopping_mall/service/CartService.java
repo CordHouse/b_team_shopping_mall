@@ -2,9 +2,11 @@ package com.example.b_team_shopping_mall.service;
 
 import com.example.b_team_shopping_mall.dto.Cart.*;
 import com.example.b_team_shopping_mall.entity.Cart;
-import com.example.b_team_shopping_mall.exception.CartNotFoundItemException;
-import com.example.b_team_shopping_mall.exception.CartNotFoundItemListException;
+import com.example.b_team_shopping_mall.entity.Product;
+import com.example.b_team_shopping_mall.entity.Register;
+import com.example.b_team_shopping_mall.exception.*;
 import com.example.b_team_shopping_mall.repository.CartRepository;
+import com.example.b_team_shopping_mall.repository.ProductRepository;
 import com.example.b_team_shopping_mall.repository.RegisterRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,8 @@ public class CartService {
     private final CartRepository cartRepository;
     private final RegisterRepository registerRepository;
 
+    private final ProductRepository productRepository;
+
     //유저가 가진 품목 전체조회
     @Transactional(readOnly = true)
     public List<CartListResponseDto> findAllCart(){
@@ -35,18 +39,32 @@ public class CartService {
         return cartListResponseDtos; //반환하기
     }
 
-    //유저가 담은 품목 전체 구매
     @Transactional
-    public List<CartBuyResponseDto> buyItem(){
+    public CartInputResponseDto inputCart(CartInputRequestDto cartInputRequestDto){
+        Product product = productRepository.findByItem(cartInputRequestDto.getItem()).orElseThrow(() -> {
+            throw new ProductNotFoundItemException();
+        });
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
-            throw new IllegalArgumentException("해당 장바구니에 품목이 없습니다.");
-        }));
-        List<CartBuyResponseDto>  cartBuyResponseDtos= new LinkedList<>();
-        cart.forEach(i -> cartBuyResponseDtos.add(new CartBuyResponseDto().toDto(i)));
-        if(cart.isEmpty())
-            throw new CartNotFoundItemListException();
-         return cartBuyResponseDtos;
+        Register register = registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
+            throw new RegisterNotFoundSearchUsernameException();
+        });
+
+        List<Cart> cartCheck = cartRepository.findByItem(cartInputRequestDto.getItem());
+
+        if(cartCheck.isEmpty()) {
+            Cart cart = Cart.builder()
+                    .item(cartInputRequestDto.getItem())
+                    .count(cartInputRequestDto.getCount())
+                    .price(product.getPrice() * cartInputRequestDto.getCount())
+                    .register(register)
+                    .product(product)
+                    .build();
+
+            cartRepository.save(cart);
+
+            return new CartInputResponseDto().toDto(product, cartInputRequestDto);
+        }
+        throw new CartOverlapException();
     }
 
     //유저의 물품 중 선택한 물품 전체삭제

@@ -34,6 +34,12 @@ public class ProductController {
         return Response.success(productService.save(requestDto));
     }
 
+    @PutMapping("/auth/manager/product/items")
+    @ResponseStatus(HttpStatus.OK) // 품목을 저장
+    public Response editProduct(@RequestBody @Valid ProductCreateRequestDto requestDto) {
+        return Response.success(productService.editProduct(requestDto));
+    }
+
     @DeleteMapping("/auth/manager/product/items/{category}") // 특정 부류에 해당하는 제품들을 삭제
     @ResponseStatus(HttpStatus.OK)
     public Response deleteCategory(@PathVariable String category) {

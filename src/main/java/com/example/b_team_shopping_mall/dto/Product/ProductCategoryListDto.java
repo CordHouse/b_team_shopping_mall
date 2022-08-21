@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 public class ProductCategoryListDto {
     private String item;
 
-    private Long price;
+    private int price;
+
+    private int count;
 
     private String name;
 
     public ProductCategoryListDto toDto(Product product) {
-        return new ProductCategoryListDto(product.getItem(), product.getPrice(), product.getRegister().getName());
+        return new ProductCategoryListDto(product.getItem(), product.getPrice(), product.getCount(), product.getRegister().getName());
     }
 }

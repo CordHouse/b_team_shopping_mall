@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<List<Product>> findAllByCategory(Category category);
 
+    Optional<Product> findByItem(String Item);
+
     void deleteByCategory(Category category);
 }
