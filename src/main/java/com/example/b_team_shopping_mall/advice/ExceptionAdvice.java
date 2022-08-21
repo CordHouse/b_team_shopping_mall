@@ -70,6 +70,18 @@ public class ExceptionAdvice {
         return Response.failure(404, "해당 유저 장바구니는 비어있습니다.");
     }
 
+    @ExceptionHandler(CartOverlapException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response cartOverlapException(){
+        return Response.failure(404, "이미 담은 물품입니다.");
+    }
+
+    @ExceptionHandler(ProductNotFoundItemException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response productNotFoundItemException(){
+        return Response.failure(404, "해당 품목이 존재하지 않습니다.");
+    }
+
     @ExceptionHandler(CartNotFoundItemException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Response cartNotFoundItemException(){

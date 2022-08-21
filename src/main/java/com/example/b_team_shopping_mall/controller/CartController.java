@@ -1,10 +1,13 @@
 package com.example.b_team_shopping_mall.controller;
 
+import com.example.b_team_shopping_mall.dto.Cart.CartInputRequestDto;
 import com.example.b_team_shopping_mall.response.Response;
 import com.example.b_team_shopping_mall.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,12 +20,11 @@ public class CartController {
     public Response findAllCart(){
         return  Response.success(cartService.findAllCart());
     }
-   //RequsetBody, PathVariable/??
-   //장바구니 물품들 모두 구매.
-    @PostMapping("/carts")
+
+    @PostMapping("/product/items")
     @ResponseStatus(HttpStatus.OK)
-    public Response buyItem(){
-        return Response.success(cartService.buyItem());
+    public Response inputCart(@RequestBody @Valid CartInputRequestDto cartInputRequestDto){
+        return Response.success(cartService.inputCart(cartInputRequestDto));
     }
 
     //장바구니 물품 삭제

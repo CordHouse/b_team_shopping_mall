@@ -32,4 +32,9 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Register register; //유저정보
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Product product;
 }
