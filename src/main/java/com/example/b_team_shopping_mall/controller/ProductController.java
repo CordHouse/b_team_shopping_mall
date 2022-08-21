@@ -11,44 +11,43 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/product")
+@RequestMapping("/api")
 public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/items")
+    @GetMapping("/product/items")
     @ResponseStatus(HttpStatus.OK) // 모든 품목들을 조회
     public Response getProducts() {
         return Response.success(productService.getProducts());
     }
 
-    @GetMapping("/items/{category}") // 특정 부류에 해당하는 제품들을 조회
+    @GetMapping("/product/items/{category}") // 특정 부류에 해당하는 제품들을 조회
     @ResponseStatus(HttpStatus.OK)
     public Response getCategories(@PathVariable String category) {
         return Response.success(productService.getProduct(category));
     }
 
-    @PostMapping("/auth/items")
+    @PostMapping("/auth/manager/product/items")
     @ResponseStatus(HttpStatus.CREATED) // 품목을 저장
     public Response save(@RequestBody @Valid ProductCreateRequestDto requestDto) {
         return Response.success(productService.save(requestDto));
     }
 
-    @DeleteMapping("/items/{category}") // 특정 부류에 해당하는 제품들을 삭제
+    @DeleteMapping("/auth/manager/product/items/{category}") // 특정 부류에 해당하는 제품들을 삭제
     @ResponseStatus(HttpStatus.OK)
     public Response deleteCategory(@PathVariable String category) {
         productService.deleteCategory(category);
         return Response.success( category + "부류에 해당되는 품목들이 삭제 되었습니다.");
     }
 
-    @DeleteMapping("/item/{id}") // 특정 아이디에 해당하는 제품들을 삭제
+    @DeleteMapping("/auth/manager/product/item/{id}") // 특정 아이디에 해당하는 제품들을 삭제
     @ResponseStatus(HttpStatus.OK)
     public Response deleteId(@PathVariable Long id) {
-        productService.deleteId(id);
-        return Response.success("id == " + id + " 인 품목이 삭제되었습니다.");
+        return Response.success(productService.deleteId(id));
     }
 
-    @DeleteMapping("/items")
+    @DeleteMapping("/auth/manager/product/items")
     @ResponseStatus(HttpStatus.OK) // 모든 품목들을 삭제
     public Response deleteProducts() {
         productService.deleteProducts();

@@ -28,6 +28,7 @@ public class ProductService {
     private final RegisterRepository registerRepository;
     private final CategoryRepository categoryRepository;
 
+    // 물품 전체 조회
     @Transactional(readOnly = true)
     public List<ProductListDto> getProducts() {
         List<Product> lst = productRepository.findAll();
@@ -39,6 +40,7 @@ public class ProductService {
         return lst.stream().map(s -> new ProductListDto().toDto(s)).collect(Collectors.toList());
     }
 
+    // 물품 단건 조회
     @Transactional(readOnly = true)
     public List<ProductCategoryListDto> getProduct(String category) {
 
@@ -55,6 +57,7 @@ public class ProductService {
         return lst.stream().map(s -> new ProductCategoryListDto().toDto(s)).collect(Collectors.toList());
     }
 
+    // 물품 등록
     @Transactional
     public ProductCreateResponseDto save(ProductCreateRequestDto requestDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -76,18 +79,17 @@ public class ProductService {
         return new ProductCreateResponseDto().toDto(product);
     }
 
+    // 물품 삭제
     @Transactional
     public void deleteCategory(String category) {
 
         Category findCategory = categoryRepository.findByCategory(category)
                 .orElseThrow(CategoryNotFoundException::new);
 
-        List<Product> lst = productRepository.findAllByCategory(findCategory)
-                .orElseThrow(CategoryProductListEmptyException::new);
-
-        productRepository.deleteAllByCategory(findCategory);
+        productRepository.deleteByCategory(findCategory);
     }
 
+    // 물품 전체 삭제
     @Transactional
     public void deleteProducts() {
         List<Product> lst = productRepository.findAll();
@@ -100,9 +102,10 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteId(Long id) {
+    public String deleteId(Long id) {
         Product lst = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
 
         productRepository.deleteById(id);
+        return lst.getItem()+" 품목이 삭제되었습니다.";
     }
 }
