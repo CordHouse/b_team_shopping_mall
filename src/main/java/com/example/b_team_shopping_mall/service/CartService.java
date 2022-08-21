@@ -25,7 +25,6 @@ public class CartService {
     @Transactional(readOnly = true)
     public List<CartListResponseDto> findAllCart(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
         List<Cart> cart = cartRepository.findAllByRegister(registerRepository.findByUsername(authentication.getName()).orElseThrow(() -> {
             throw new IllegalArgumentException("해당 장바구니에 품목이 없습니다.");
         }));
